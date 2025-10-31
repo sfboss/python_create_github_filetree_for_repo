@@ -70,6 +70,19 @@ npm run dev
 
 5. Open your browser to `http://localhost:3000`
 
+### Demo Mode
+
+To quickly test all features without making API calls, you can use the Demo component which displays mock data:
+
+1. Edit `src/main.tsx` and change the import:
+```typescript
+import Demo from './Demo'  // Instead of App
+```
+
+2. Replace `<App />` with `<Demo />` in the render function
+
+3. Start the dev server to see the file tree with sample data
+
 ### Building for Production
 
 ```bash
