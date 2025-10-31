@@ -24,7 +24,7 @@ export const fetchRepoTree = async (
   branch: string = 'main'
 ): Promise<TreeNode[]> => {
   try {
-    // First try to get the tree with the specified branch
+    // Try to get the tree with the specified branch, fallback to master if needed
     let sha: string;
     
     try {
@@ -35,7 +35,7 @@ export const fetchRepoTree = async (
       });
       sha = branchData.commit.sha;
     } catch (error) {
-      // If 'main' doesn't exist, try 'master'
+      // If the specified branch doesn't exist, try 'master' as a common alternative
       if (branch === 'main') {
         const { data: branchData } = await octokit.repos.getBranch({
           owner,

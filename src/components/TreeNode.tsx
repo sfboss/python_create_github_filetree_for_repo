@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { TreeNode as TreeNodeType } from '../types';
 import { getFileIcon, getFolderIcon } from '../utils/icons';
 import { ChevronRight, ChevronDown } from 'lucide-react';
@@ -27,13 +27,17 @@ const TreeNode: React.FC<TreeNodeProps> = ({ node, level, searchTerm }) => {
     }
   };
 
-  // Filter children based on search term
-  const filteredChildren = node.children?.filter(child => 
-    child.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (child.children && child.children.some(c => 
-      c.name.toLowerCase().includes(searchTerm.toLowerCase())
-    ))
-  );
+  // Memoize filtered children to avoid recalculation on every render
+  const filteredChildren = useMemo(() => {
+    if (!node.children) return undefined;
+    
+    return node.children.filter(child => 
+      child.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (child.children && child.children.some(c => 
+        c.name.toLowerCase().includes(searchTerm.toLowerCase())
+      ))
+    );
+  }, [node.children, searchTerm]);
 
   // If searching and no matches in this node or children, don't render
   if (searchTerm && !node.name.toLowerCase().includes(searchTerm.toLowerCase()) && 
